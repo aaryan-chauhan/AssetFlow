@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Modal } from "@/components/ui/modal";
 import { cn } from "@/lib/utils";
 import type { MaintStatus } from "@/lib/types";
-import { Wrench, PlusCircle, Loader2, Check, X } from "lucide-react";
+import { PlusCircle, Loader2, Check, X } from "lucide-react";
 
 type Req = {
   id: string; issue: string; priority: string; status: MaintStatus; technician_name: string | null;

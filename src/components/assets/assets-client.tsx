@@ -12,7 +12,7 @@ import { Select } from "@/components/ui/select";
 import { Modal } from "@/components/ui/modal";
 import { Table, THead, TBody, TR, TH, TD } from "@/components/ui/table";
 import { StatusBadge } from "@/components/app/status-badge";
-import { STATUS_META, type Asset, type Category, type AssetStatus } from "@/lib/types";
+import { STATUS_META, type Asset, type Category } from "@/lib/types";
 import { Search, PlusCircle, Loader2, QrCode, Boxes } from "lucide-react";
 
 type AssetRow = Asset & { category: { id: string; name: string } | null };
