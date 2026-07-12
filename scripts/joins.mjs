@@ -1,0 +1,16 @@
+import { createClient } from "@supabase/supabase-js";
+import { config } from "dotenv"; import WebSocket from "ws";
+globalThis.WebSocket ??= WebSocket; config({ path: ".env.local" });
+const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+await sb.auth.signInWithPassword({ email:"admin@assetflow.dev", password:"Password123!" });
+const T = async (label, p) => { const {error}=await p; console.log((error?"✗ FAIL":"✓ ok  ")+" "+label+(error?" -> "+error.message:"")); };
+await T("auth profile+dept", sb.from("profiles").select("*, department:departments!profiles_department_id_fkey(name)").limit(1));
+await T("dashboard overdue", sb.from("allocations").select("id, asset:assets(tag,name), holder:profiles!allocations_holder_employee_id_fkey(full_name)").limit(1));
+await T("dashboard activity", sb.from("activity_log").select("id, actor:profiles!activity_log_actor_id_fkey(full_name)").limit(1));
+await T("allocation transfers", sb.from("transfer_requests").select("id, asset:assets(tag,name), to:profiles!transfer_requests_to_employee_id_fkey(full_name), requester:profiles!transfer_requests_requested_by_fkey(full_name)").limit(1));
+await T("booking booker", sb.from("bookings").select("id, booker:profiles!bookings_booked_by_fkey(full_name)").limit(1));
+await T("maintenance", sb.from("maintenance_requests").select("id, asset:assets(tag,name), raiser:profiles!maintenance_requests_raised_by_fkey(full_name)").limit(1));
+await T("audit cycles+dept", sb.from("audit_cycles").select("*, dept:departments(name)").limit(1));
+await T("audit assignments", sb.from("audit_assignments").select("cycle_id, auditor:profiles(full_name)").limit(1));
+await T("org departments", sb.from("departments").select("*, head:profiles!departments_head_fk(full_name), parent:departments!departments_parent_id_fkey(name)").limit(1));
+await T("reports dept allocs", sb.from("allocations").select("holder:profiles!allocations_holder_employee_id_fkey(department:departments!profiles_department_id_fkey(name))").eq("status","active").limit(1));

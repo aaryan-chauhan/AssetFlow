@@ -11,7 +11,7 @@ export default async function OrganizationPage() {
 
   const supabase = await createClient();
   const [{ data: departments }, { data: categories }, { data: employees }] = await Promise.all([
-    supabase.from("departments").select("*, head:profiles!departments_head_fk(full_name), parent:departments!departments_parent_id_fkey(name)").order("name"),
+    supabase.from("departments").select("*, head:profiles!departments_head_fk(full_name)").order("name"),
     supabase.from("asset_categories").select("*").order("name"),
     supabase.from("profiles").select("*, department:departments!profiles_department_id_fkey(name)").order("full_name"),
   ]);
